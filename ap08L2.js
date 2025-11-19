@@ -167,6 +167,6 @@ export function render(scene, car) {
     cameraPosition.y = carPosition.y + 5;
     camera.position.copy(cameraPosition);
     camera.lookAt(carPosition);
-    camera.up.set(0, 1, 0);
+    camera.up.set( 0, 1, 0);
     renderer.render(scene, camera);
 }
