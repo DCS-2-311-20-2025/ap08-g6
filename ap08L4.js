@@ -87,6 +87,22 @@ export function init(scene, size, id, offset, texture) {
 
 // コース(自動運転用)
 export function makeCourse(scene) {
+    const courseV=[];
+    const parts =[L4,L1,L2,L3];
+    parts.forEach((part)=>{
+        part.controlPoints.forEach((p)=>{
+            courseV.push(
+            new THREE.Vector3(
+                p[0]+part.origin.x,
+                0,
+                p[1]+part.origin.z
+              )
+            )
+        });
+    })
+    course = new THREE.CatmullRomCurve3(
+        courseV,true
+    )
 }
 
 // カメラを返す
@@ -110,7 +126,15 @@ export function resize() {
 }
 
 // 描画処理
+const cl = new THREE.Clock();
+const carPos= new THREE.Vector3();
+const carTr = new THREE.Vector3();
 export function render(scene, car) {
+    const time = (cl.getElapsedTime()/20);
+    course.getPointAt(time%1,carPos);
+    car.position.copy(carPos);
+    course.getPointAt((time+0.01)%1,carTr);
+    car.lookAt(carTr);
     camera.lookAt(car.position.x, car.position.y, car.position.z);
     renderer.render(scene, camera);
 }
