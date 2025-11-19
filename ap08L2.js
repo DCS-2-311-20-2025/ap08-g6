@@ -49,7 +49,7 @@ export function init(scene, size, id, offset, texture) {
 
     // コース(描画)
     //制御点を補完して曲線を作る
-    course = new THREE.CatmullRomCurver3(
+    course = new THREE.CatmullRomCurve3(
         controlPoints.map((p)=>{
             return (new THREE.Vector3()).set(
                 offset.x + p[0],
