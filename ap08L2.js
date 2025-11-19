@@ -49,12 +49,12 @@ export function init(scene, size, id, offset, texture) {
 
     // コース(描画)
     //制御点を補完して曲線を作る
-    course = new THREE.CatmullRomCurver3{
+    course = new THREE.CatmullRomCurver3(){
         controlPoints.map((p)=>{
             return (new THREE.Vector3()).set(
                 offset.x + p[0],
                 0,
-                offset/z + p[1]
+                offset.z + p[1]
             );
         }), false
     }
@@ -63,7 +63,7 @@ export function init(scene, size, id, offset, texture) {
     points.forEach((point)=>{
         const road = new THREE.Mesh(
         new THREE.CircleGeometry(5,16),
-        new THREE.MeshLamberMaterial({
+        new THREE.MeshLambertMaterial({
         color: "gray",
         })
     )
