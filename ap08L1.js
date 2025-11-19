@@ -50,11 +50,53 @@ export function init(scene, size, id, offset, texture) {
     // ビル
 
     // コース(描画)
+    course=new THREE.CatmullRomCurve3(
+        controlPoints.map((p)=>{
+            return (new THREE.Vector3()).set(
+                offset.x+p[0],
+                0,
+                offset.z+p[1]
+            );
+        }),false
+    )
+    //曲線から100箇所を取り出し、円を並べる
+    const points=course.getPoints(100);
+    points.forEach((point)=>{
+        const road=new THREE.Mesh(
+            new THREE.CircleGeometry(5,16),
+            new THREE.MeshLambertMaterial({
+                color:"gray",
+            })
+        )
+        road.rotateX(-Math.PI/2);
+        road.position.set(
+            point.x,
+            0,
+            point.z
+        );
+        scene.add(road);
+    });
 
 }
 
 // コース(自動運転用)
 export function makeCourse(scene) {
+    const courseVectors=[];
+    const parts=[L1,L2,L3,L4];
+    parts.forEach((part)=>{
+        part.controlPoints.forEach((p)=>{
+            courseVectors.push(
+                new THREE.Vector3(
+                    p[0]+part.origin.x,
+                    0,
+                    p[1]+part.origin.z,
+                )
+            )
+        });
+    })
+    course=new THREE.CatmullRomCurve3(
+        courseVectors, true
+    )
 }
 
 // カメラを返す
