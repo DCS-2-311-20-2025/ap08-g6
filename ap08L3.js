@@ -141,7 +141,6 @@ export function setCar(scene, car) {
     car.scale.set(SCALE,SCALE,SCALE);
     scene.add(car);
 }
-
 // Windowサイズの変更処理
 export function resize() {
     camera.updateProjectionMatrix();
