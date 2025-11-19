@@ -1,7 +1,7 @@
 //
 // 応用プログラミング 第8回 (ap08L1.js)
 //
-// G48400-2024 拓殖太郎
+// G484462024 木村翔
 //
 
 "use strict"; // 厳格モード
@@ -19,6 +19,8 @@ let course;
 export const origin = new THREE.Vector3();
 export const controlPoints = [
     [ 25, 40],
+    [5,0],
+    [-20,20],
     [-50,-20]
 ]
 export function init(scene, size, id, offset, texture) {
@@ -62,6 +64,10 @@ export function getCamera() {
 
 // 車の設定
 export function setCar(scene, car) {
+    const SCALE=0.01;
+    car.position.copy(origin);
+    car.scale.set(SCALE, SCALE, SCALE);
+    scene.add(car);
 }
 
 // Windowサイズの変更処理
@@ -72,7 +78,15 @@ export function resize() {
 }
 
 // 描画処理
+const clock=new THREE.Clock();
+const carPosition=new THREE.Vector3();
+const carTarget=new THREE.Vector3();
 export function render(scene, car) {
     camera.lookAt(car.position.x, car.position.y, car.position.z);
     renderer.render(scene, camera);
+    const time=(clock.getElapsedTime()/20);
+    course.getPointAt(time%1,carPosition);
+    car.position.copy(carPosition);
+    course.getPointAt((time+0.01)%1,carTarget);
+    car.lookAt(carTarget);
 }
