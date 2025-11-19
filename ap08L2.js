@@ -49,7 +49,7 @@ export function init(scene, size, id, offset, texture) {
 
     // コース(描画)
     //制御点を補完して曲線を作る
-    course = new THREE.CatmullRomCurver3(){
+    course = new THREE.CatmullRomCurver3(
         controlPoints.map((p)=>{
             return (new THREE.Vector3()).set(
                 offset.x + p[0],
@@ -57,7 +57,7 @@ export function init(scene, size, id, offset, texture) {
                 offset.z + p[1]
             );
         }), false
-    }
+    )
     //曲線から100箇所を取り出し、円を並べる
     const points = course.getPoints(100);
     points.forEach((point)=>{
