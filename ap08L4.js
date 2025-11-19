@@ -53,7 +53,33 @@ export function init(scene, size, id, offset, texture) {
     scene.add(plane);
 
     // ビル
-
+    function makeBuilding(x,z,type){
+        const height=[2,2,7,4,5];
+        const bh = height[type]*5;
+        const g = new THREE.BoxGeometry(8,bh,8);
+        const m = new THREE.MeshLambertMaterial({map:texture});
+        const sUvS =(type*2+1)/11;
+        const sUvE =(type*2+2)/11;
+        const tUvS =(type*2+2)/11;
+        const tUvE =(type*2+3)/11;
+        const uvs = g.getAttribute("uv");
+        for(let i=0;i<48;i+=4){
+           if(i<16||i>22){
+            uvs.array[i]=sUvS;
+            uvs.array[i+2]=sUvE;
+           }else{
+                uvs.array[i]=tUvS;
+                uvs.array[i+2]=tUvE;
+            }
+        }
+        const bldg=new THREE.Mesh(
+            g,
+            m
+        )
+        bldg.position.set(50,6,30);
+        scene.add(bldg);
+    }
+    makeBuilding(20,20,3);
     // コース(描画)
     //制御補給による曲線
     course=new THREE.CatmullRomCurve3(
