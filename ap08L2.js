@@ -26,7 +26,7 @@ export const controlPoints = [
 ]
 export function init(scene, size, id, offset, texture) {
     origin.set(offset.x, 0, offset.z);
-    camera = new THREE.PerspectiveCamera(20, 1, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(80, 1, 0.1, 1000);
     {
       camera.position.set(0, 10, 0);
       camera.lookAt(offset.x, 0, offset.z);
@@ -53,7 +53,10 @@ export function init(scene, size, id, offset, texture) {
         const height = [2, 2, 7, 4, 5];
         const bldgH = height[type]*5;
         const geometry = new THREE.BoxGeometry(8, bldgH, 8);
-        const material = new THREE.MeshLambertMaterial({color: 0x808080});
+        const material = new THREE.MeshLambertMaterial({
+            map: texture,
+            color:0xffffff
+        });
         const sideUvS = (type*2+1)/11;
         const sideUvE = (type*2+2)/11;
         const topUvS = (type*2+2)/11;
@@ -133,6 +136,7 @@ export function getCamera() {
     return camera;
 }
 
+
 // 車の設定
 export function setCar(scene, car) {
     const SCALE = 0.01;
@@ -152,12 +156,17 @@ export function resize() {
 const clock = new THREE.Clock();
 const carPosition = new THREE.Vector3();
 const carTarget = new THREE.Vector3();
+const cameraPosition = new THREE.Vector3();
 export function render(scene, car) {
     const time = (clock.getElapsedTime()/20);
     course.getPointAt(time % 1, carPosition);
     car.position.copy(carPosition);
     course.getPointAt((time+0.01)%1,carTarget);
     car.lookAt(carTarget);
-    camera.lookAt(car.position.x, car.position.y, car.position.z);
+    cameraPosition.lerpVectors(carTarget, carPosition, 0.1);
+    cameraPosition.y = carPosition.y + 5;
+    camera.position.copy(cameraPosition);
+    camera.lookAt(carPosition);
+    camera.up.set( 0, 1, 0);
     renderer.render(scene, camera);
 }
